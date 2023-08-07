@@ -85,6 +85,7 @@ class BoardSyncer:
             'promdevice.py': 'promdevice.py',
             'utils.py': 'utils.py',
             'micro-typing.py': 'typing.py',
+            'microdot.py': 'microdot.py'
         }
         logger.debug('Desired files: %s', desired_files)
         for src, dest in desired_files.items():

@@ -7,16 +7,22 @@ import machine
 from time import sleep, time
 from binascii import hexlify
 import ntptime
+import gc
 
 from config import SSID, WPA_KEY
 from device_config import DEVICE_CONFIG
 from utils import wlan_status_code, logger
 from promdevice import PrometheusDevice, GpioSensor
+from microdot import Microdot
 
 try:
     import ujson
 except ImportError:
     import json as ujson
+
+gc.collect()  # enable garbage collection
+
+app = Microdot()
 
 
 class PromGpio:
@@ -40,11 +46,6 @@ class PromGpio:
         logger.debug('MAC: %s' % self.mac)
         self._set_time_from_ntp()
         self.boot_time = time()
-
-    def run(self):
-        logger.debug('Run method; call signal.pause()')
-        while True:
-            sleep(10)  # TODO: fixme
 
     def _set_time_from_ntp(self):
         logger.debug('Setting time from NTP...')
@@ -83,6 +84,14 @@ class PromGpio:
                 logger.debug('Could not connect to WLAN after 15s; reset')
                 machine.reset()
         print('network config:', self.wlan.ifconfig())
+
+    @app.route('/')
+    def handle_request(self, _):
+        return 'The only thing here is /metrics'
+
+    def run(self):
+        logger.debug('Run method; call app.run()')
+        app.run(port=80)
 
 
 if __name__ == '__main__':
