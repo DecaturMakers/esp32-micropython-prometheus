@@ -13,7 +13,7 @@ from config import SSID, WPA_KEY
 from device_config import DEVICE_CONFIG
 from utils import wlan_status_code, logger
 from promdevice import PrometheusDevice, GpioSensor
-from microdot import Microdot
+from microdot import Microdot, URLPattern
 
 try:
     import ujson
@@ -85,12 +85,12 @@ class PromGpio:
                 machine.reset()
         print('network config:', self.wlan.ifconfig())
 
-    @app.route('/')
     def handle_request(self, _):
         return 'The only thing here is /metrics'
 
     def run(self):
         logger.debug('Run method; call app.run()')
+        app.url_map.append((['GET'], URLPattern('/'), self.handle_request))
         app.run(port=80)
 
 
