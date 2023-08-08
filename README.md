@@ -18,7 +18,52 @@ pip install -r requirements.txt
 
 ## Metrics Exposed
 
-TBD.
+* `python_info` Python platform information.
+* `esp_info` Information about the underlying platform.
+* `process_start_time_seconds` Start time of the process since unix epoch in seconds.
+* `process_uptime_seconds` Number of seconds since the process started.
+* `gpio_pin_is_on` Whether the GPIO pin is on (1) or off (2)
+* `gpio_pin_on_seconds` How many seconds the pin has been on; -1 if it is off.
+* `gpio_pin_off_seconds` How many seconds the pin has been off; -1 if it is on.
+* `gpio_pin_seconds_since_on` How many seconds since the pin last turned on.
+* `gpio_pin_seconds_since_off` How many seconds since the pin last turned off.
+
+Example Output:
+
+```
+# HELP python_info Python platform information.
+# TYPE python_info gauge
+python_info{implementation="MicroPython 1.20.0",major="1",minor="20",patchlevel="0",version="1.20.0"} 1.0
+# HELP esp_info Information about the underlying platform.
+# TYPE esp_info gauge
+esp_info{hostname="esp32-gpiotest",mac="7c:9e:bd:61:ab:e4",platform="esp32",unique_id="7c9ebd61abe4"} 1.0
+# HELP process_start_time_seconds Start time of the process since unix epoch in seconds.
+# TYPE process_start_time_seconds gauge
+process_start_time_seconds{} 1.691518e+09
+# HELP process_uptime_seconds Number of seconds since the process started.
+# TYPE process_uptime_seconds gauge
+process_uptime_seconds{} 178.0
+# HELP gpio_pin_is_on Whether the GPIO pin is on (1) or off (2)
+# TYPE gpio_pin_is_on gauge
+gpio_pin_is_on{hostname="esp32-gpiotest",pin_name="left",pin_number="32"} 0.0
+gpio_pin_is_on{hostname="esp32-gpiotest",pin_name="right",pin_number="19"} 0.0
+# HELP gpio_pin_on_seconds How many seconds the pin has been on; -1 if it is off.
+# TYPE gpio_pin_on_seconds gauge
+gpio_pin_on_seconds{hostname="esp32-gpiotest",pin_name="left",pin_number="32"} -1.0
+gpio_pin_on_seconds{hostname="esp32-gpiotest",pin_name="right",pin_number="19"} -1.0
+# HELP gpio_pin_off_seconds How many seconds the pin has been off; -1 if it is on.
+# TYPE gpio_pin_off_seconds gauge
+gpio_pin_off_seconds{hostname="esp32-gpiotest",pin_name="left",pin_number="32"} 153.0
+gpio_pin_off_seconds{hostname="esp32-gpiotest",pin_name="right",pin_number="19"} 2.0
+# HELP gpio_pin_seconds_since_on How many seconds since the pin last turned on.
+# TYPE gpio_pin_seconds_since_on gauge
+gpio_pin_seconds_since_on{hostname="esp32-gpiotest",pin_name="left",pin_number="32"} 157.0
+gpio_pin_seconds_since_on{hostname="esp32-gpiotest",pin_name="right",pin_number="19"} 19.0
+# HELP gpio_pin_seconds_since_off How many seconds since the pin last turned off.
+# TYPE gpio_pin_seconds_since_off gauge
+gpio_pin_seconds_since_off{hostname="esp32-gpiotest",pin_name="left",pin_number="32"} 153.0
+gpio_pin_seconds_since_off{hostname="esp32-gpiotest",pin_name="right",pin_number="19"} 2.0
+```
 
 ## Hardware Setup
 

@@ -6,58 +6,6 @@ from time import time
 from utils import logger
 
 
-class PinState:
-
-    def __init__(self, current_value: int, pin: Pin, on_value: int):
-        self._pin: Pin = pin
-        self._on_value: int = on_value
-        self._input_state: int = -1
-        self._input_on_time: float = -1
-        self._input_off_time: float = -1
-        if current_value == self._on_value:
-            self.set_input_on(pin)
-        else:
-            self.set_input_off(pin)
-
-    @property
-    def input_on_seconds(self) -> float:
-        if self._input_state == 1:
-            return self.seconds_since_on
-        return 0
-
-    @property
-    def input_state(self) -> int:
-        return self._input_state
-
-    @property
-    def seconds_since_on(self) -> float:
-        if self._input_on_time == -1:
-            return -1
-        return time() - self._input_on_time
-
-    @property
-    def seconds_since_off(self) -> float:
-        if self._input_off_time == -1:
-            return -1
-        return time() - self._input_off_time
-
-    def set_input_on(self, pin: Pin):
-        logger.debug('Pin %s is ON', pin)
-        self._input_state = 1
-        self._input_on_time = time()
-
-    def set_input_off(self, pin: Pin):
-        logger.debug('Pin %s is OFF', pin)
-        self._input_state = 0
-        self._input_off_time = time()
-
-    def handle_change(self, pin: Pin):
-        if pin.value() == self._on_value:
-            self.set_input_on(pin)
-        else:
-            self.set_input_off(pin)
-
-
 class GpioSensor:
 
     def __init__(
@@ -87,6 +35,9 @@ class GpioSensor:
             'on_value=%d)', self.name, self.pin_num, self.pull_up,
             self.pull_down, self.on_value
         )
+        self._input_state: int = -1
+        self._input_on_time: float = -1
+        self._input_off_time: float = -1
         pull = None
         if self.pull_up:
             pull = Pin.PULL_UP
@@ -94,14 +45,58 @@ class GpioSensor:
             pull = Pin.PULL_DOWN
         self.pin: Pin = Pin(self.pin_num, mode=Pin.IN, pull=pull)
         logger.debug('Instantiated pin %s', self.pin)
-        self.pin_state: PinState = PinState(
-            current_value=self.pin.value(), pin=self.pin,
-            on_value=self.on_value
-        )
         self.pin.irq(
-            handler=self.pin_state.handle_change,
+            handler=self.handle_change,
             trigger=Pin.IRQ_RISING | Pin.IRQ_FALLING
         )
+        if self.pin.value() == self.on_value:
+            self.set_input_on(self.pin)
+        else:
+            self.set_input_off(self.pin)
+
+    @property
+    def input_on_seconds(self) -> float:
+        if self._input_state == 1:
+            return self.seconds_since_on
+        return -1
+
+    @property
+    def input_off_seconds(self) -> float:
+        if self._input_state == 0:
+            return self.seconds_since_off
+        return -1
+
+    @property
+    def input_state(self) -> int:
+        return self._input_state
+
+    @property
+    def seconds_since_on(self) -> float:
+        if self._input_on_time == -1:
+            return -1
+        return time() - self._input_on_time
+
+    @property
+    def seconds_since_off(self) -> float:
+        if self._input_off_time == -1:
+            return -1
+        return time() - self._input_off_time
+
+    def set_input_on(self, pin: Pin):
+        logger.debug('Pin %s is ON', pin)
+        self._input_state = 1
+        self._input_on_time = time()
+
+    def set_input_off(self, pin: Pin):
+        logger.debug('Pin %s is OFF', pin)
+        self._input_state = 0
+        self._input_off_time = time()
+
+    def handle_change(self, pin: Pin):
+        if pin.value() == self.on_value:
+            self.set_input_on(pin)
+        else:
+            self.set_input_off(pin)
 
 
 class PrometheusDevice:
