@@ -14,13 +14,13 @@ DEVICE_CONFIG = {
             {
                 'name': 'left',
                 'pin_num': 32,
-                'pull_up': True,
+                'pull_up': False,
                 'on_value': 0
             },
             {
                 'name': 'right',
                 'pin_num': 19,
-                'pull_up': True,
+                'pull_up': False,
                 'on_value': 0
             }
         ]
