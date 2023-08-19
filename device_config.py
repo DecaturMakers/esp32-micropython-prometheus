@@ -24,5 +24,22 @@ DEVICE_CONFIG = {
                 'on_value': 0
             }
         ]
+    },
+    '0cb815c53148': {
+        'name': 'esp32-sidedoor',
+        'pins': [
+            {
+                'name': 'latch',
+                'pin_num': 32,
+                'pull_up': False,
+                'on_value': 0
+            },
+            {
+                'name': 'magnet',
+                'pin_num': 19,
+                'pull_up': True,
+                'on_value': 0
+            }
+        ]
     }
 }
