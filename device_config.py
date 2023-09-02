@@ -8,18 +8,24 @@ of the ``GpioSensor`` class in ``promdevice.py``.
 """
 
 DEVICE_CONFIG = {
-    '7c9ebd61abe4': {
-        'name': 'esp32-gpiotest',
+    '0cb815c328dc': {
+        'name': 'esp32-frontdoor',
         'pins': [
             {
-                'name': 'left',
+                'name': 'latch',
                 'pin_num': 32,
                 'pull_up': False,
                 'on_value': 0
             },
             {
-                'name': 'right',
+                'name': 'leftmag',
                 'pin_num': 19,
+                'pull_up': False,
+                'on_value': 0
+            },
+            {
+                'name': 'rightmag',
+                'pin_num': 18,
                 'pull_up': False,
                 'on_value': 0
             }
