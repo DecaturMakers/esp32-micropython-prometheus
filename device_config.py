@@ -14,19 +14,19 @@ DEVICE_CONFIG = {
             {
                 'name': 'latch',
                 'pin_num': 32,
-                'pull_up': False,
-                'on_value': 0
+                'pull_up': True,
+                'on_value': 1
             },
             {
                 'name': 'leftmag',
                 'pin_num': 19,
-                'pull_up': False,
+                'pull_up': True,
                 'on_value': 0
             },
             {
                 'name': 'rightmag',
                 'pin_num': 18,
-                'pull_up': False,
+                'pull_up': True,
                 'on_value': 0
             }
         ]
