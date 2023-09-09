@@ -47,5 +47,22 @@ DEVICE_CONFIG = {
                 'on_value': 0
             }
         ]
+    },
+    '0cb815c43a2c': {
+        'name': 'esp32-rollup',
+        'pins': [
+            {
+                'name': 'latch',
+                'pin_num': 32,
+                'pull_down': True,
+                'on_value': 0
+            },
+            {
+                'name': 'magnet',
+                'pin_num': 19,
+                'pull_up': True,
+                'on_value': 0
+            }
+        ]
     }
 }
